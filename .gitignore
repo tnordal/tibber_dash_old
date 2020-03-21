@@ -77,6 +77,12 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# This project
+.vscode/
+
+# Temporary ignore
+
+
 # IPython
 profile_default/
 ipython_config.py
