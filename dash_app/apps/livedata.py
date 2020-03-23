@@ -33,7 +33,7 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         mode='gauge+number',
         delta = {'reference': 200},
         gauge = {
-            'axis': {'visible': True},
+            'axis': {'visible': True, 'range': [None, 1]},
             'bgcolor':'blue'},
         domain = {'row': 0, 'column': 0}))
 
