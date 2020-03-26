@@ -6,7 +6,8 @@ from plotly.subplots import make_subplots
 
 import numpy as np 
 
-from app import app
+from app import app #, models, execute_db
+from .context import models, execute_db
 
 def go_indicator():
     return  go.Indicator(
@@ -26,14 +27,19 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
 
     fig = go.Figure()
 
+    max_range_power = 5000
+    if power > max_range_power:
+        max_range_power = power * 1.2
+    
     fig.add_trace(go.Indicator(
         value = price,
+        number= {'valueformat':'.3s'},
         name = 'Tarzan',
-        title={'text':'Current Price'},
+        title={'text':'Cost since midnight'},
         mode='gauge+number',
         delta = {'reference': 200},
         gauge = {
-            'axis': {'visible': True, 'range': [None, 1]},
+            'axis': {'visible': True, 'range': [None, 5]},
             'bgcolor':'blue'},
         domain = {'row': 0, 'column': 0}))
 
@@ -43,17 +49,18 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         delta = {'reference': 200},
         mode='gauge+number',
         gauge = {
-            'axis': {'visible': True},
+            'axis': {'visible': True, 'range': [None, max_range_power]},
             'bgcolor':'blue'},        
         domain = {'row': 0, 'column': 1}))
 
     fig.add_trace(go.Indicator(
         value = consumption,
+        number= {'valueformat':'.4s'},
         title={'text':'Cunsumtion since midnight'},
         delta = {'reference': 200},
         mode='gauge+number',
         gauge = {
-            'axis': {'visible': True},
+            'axis': {'visible': True, 'range': [None, 50]},
             'bgcolor':'blue'},
         domain = {'row': 0, 'column': 2}))
 
@@ -120,7 +127,9 @@ layout = html.Div([
     [Input('interval_indicators', 'n_intervals')]
 )
 def update_indicators(n_intervals):
-    price = np.random.random()
-    power = 3000 * price
-    consumption = 30 * price
+    results = execute_db.live_data()
+    print(results)
+    price = results['accumulated_cost']
+    power = results['power']
+    consumption = results['accumulated']
     return build_3figures(price=price, power=power, consumption=consumption)
