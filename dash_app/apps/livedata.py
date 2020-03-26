@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 import numpy as np 
 
 from app import app #, models, execute_db
-from .context import models, execute_db
+from . import models, execute_db
 
 def go_indicator():
     return  go.Indicator(
