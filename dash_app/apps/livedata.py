@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+
 import numpy as np 
 import os
 import pandas as pd 
@@ -13,6 +14,7 @@ from . import db
 
 dt = db.live_data_history()
 print(dt.head())
+
 
 def go_indicator():
     return  go.Indicator(
@@ -32,7 +34,7 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
 
     fig = go.Figure()
 
-    max_range_power = 5000
+    max_range_power = 7000
     if power > max_range_power:
         max_range_power = power * 1.2
     
@@ -70,41 +72,42 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         domain = {'row': 0, 'column': 2}))
 
     fig.update_layout(
-        grid = {'rows': 1, 'columns': 3, 'pattern': "independent"}
+        grid = {'rows': 1, 'columns': 3, 'pattern': "independent"},
+        template='plotly_dark'
         )
 
 
     return fig
 
 def build_3trends(dt):
-    fig = make_subplots(rows=1, cols=3)
+    fig = make_subplots(rows=1, cols=1)
 
     x = [0,1,2,3,4,5]
     y = [0,1,2,3,4,5]
 
-    fig.add_trace(go.Scatter(
-        x=dt['timestamp'],
-        y=dt['accumulated_cost'],
-        name='Cost Since Midnight',
-        showlegend=False
+    # fig.add_trace(go.Scatter(
+    #     x=dt['timestamp'],
+    #     y=dt['accumulated_cost'],
+    #     name='Cost Since Midnight',
+    #     showlegend=False
 
-    ), row=1, col=1)
+    # ), row=1, col=1)
     fig.add_trace(go.Scatter(
         x=dt['timestamp'],
         y=dt['power'],
         name='Current Power',
         showlegend=False
 
-    ), row=1, col=2)
-    fig.add_trace(go.Scatter(
-        x=dt['timestamp'],
-        y=dt['accumulated'],
-        name='Consumption Since Midnight',
-        showlegend=False
+    ), row=1, col=1)
+    # fig.add_trace(go.Scatter(
+    #     x=dt['timestamp'],
+    #     y=dt['accumulated'],
+    #     name='Consumption Since Midnight',
+    #     showlegend=False
 
-    ), row=1, col=3)   
+    # ), row=1, col=3)   
 
-    fig.update_layout(title_text='Title')
+    fig.update_layout(title_text='Title', template='plotly_dark')
 
     return fig
 
