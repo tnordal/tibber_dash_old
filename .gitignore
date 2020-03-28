@@ -79,7 +79,7 @@ target/
 
 # This project
 .vscode/
-dash_app/tibber_api/config.json
+tibber_api/config.json
 *.db
 
 # Temporary ignore
