@@ -1,12 +1,28 @@
 from sqlalchemy import create_engine, Column, String, Float, DateTime, Integer, func
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from .models import Base, LiveTable
+from datetime import datetime as dt 
+import os
 
-import os 
 
+Base = declarative_base()
+
+class LiveTable(Base):
+    __tablename__ = 'livetable'
+    id = Column('id', Integer, primary_key=True)
+    timestamp = Column('timestamp', DateTime, default=dt.now)
+    power = Column('power', Integer)
+    min_power = Column('min_power', Float)
+    max_power = Column('max_power', Float)
+    avg_power = Column('avg_power', Float)
+    accumulated = Column('accumulated', Float)
+    accumulated_cost = Column('accumulated_cost', Float)
+    currency = Column('currency', String(5))
+    
 
 def live_data():
-    db_path = os.path.join(os.path.dirname(__file__), '..', 'db', 'tibber_live.db')
+    db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
+    db_path = 'tibber_live.db'
     engine = create_engine('sqlite:///{}'.format(db_path), echo=False)
     Base.metadata.create_all(bind=engine)
     Session = sessionmaker(bind=engine)
@@ -29,3 +45,5 @@ def live_data():
 
     session.close()
     return output
+
+

@@ -5,9 +5,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 import numpy as np 
+import os
 
-from app import app #, models, execute_db
-from . import models, execute_db
+from app import app
+from . import db
 
 def go_indicator():
     return  go.Indicator(
@@ -127,8 +128,8 @@ layout = html.Div([
     [Input('interval_indicators', 'n_intervals')]
 )
 def update_indicators(n_intervals):
-    results = execute_db.live_data()
-    print(results)
+    results = db.live_data()
+    # print(results)
     price = results['accumulated_cost']
     power = results['power']
     consumption = results['accumulated']
