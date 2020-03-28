@@ -15,7 +15,7 @@ from dateutil import parser
 import os
 
 
-db_path = os.path.join(os.path.dirname(__file__), '..', 'db', 'tibber_live.db')
+db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
 config_file = os.path.join(os.path.dirname(__file__), 'config.json')
 
 # print(db_path)
