@@ -71,6 +71,7 @@ def live_data_history():
         df_rows.append(dict1)
 
     df = pd.DataFrame(df_rows)
+    session.close()
     return df
 
 if __name__ == "__main__":

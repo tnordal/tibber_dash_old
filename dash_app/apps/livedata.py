@@ -6,9 +6,13 @@ from plotly.subplots import make_subplots
 
 import numpy as np 
 import os
+import pandas as pd 
 
 from app import app
 from . import db
+
+dt = db.live_data_history()
+print(dt.head())
 
 def go_indicator():
     return  go.Indicator(
@@ -72,30 +76,30 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
 
     return fig
 
-def build_3trends():
+def build_3trends(dt):
     fig = make_subplots(rows=1, cols=3)
 
     x = [0,1,2,3,4,5]
     y = [0,1,2,3,4,5]
 
     fig.add_trace(go.Scatter(
-        x=x,
-        y=y,
-        name='Current Price',
+        x=dt['timestamp'],
+        y=dt['accumulated_cost'],
+        name='Cost Since Midnight',
         showlegend=False
 
     ), row=1, col=1)
     fig.add_trace(go.Scatter(
-        x=x,
-        y=y,
+        x=dt['timestamp'],
+        y=dt['power'],
         name='Current Power',
         showlegend=False
 
     ), row=1, col=2)
     fig.add_trace(go.Scatter(
-        x=x,
-        y=y,
-        name='Consumption since midnight',
+        x=dt['timestamp'],
+        y=dt['accumulated'],
+        name='Consumption Since Midnight',
         showlegend=False
 
     ), row=1, col=3)   
@@ -117,7 +121,7 @@ layout = html.Div([
     ),
     dcc.Graph(
         id='testing_trends',
-        figure=build_3trends()
+        figure=build_3trends(dt)
     )
 ], className='main livebody')
 
@@ -134,3 +138,13 @@ def update_indicators(n_intervals):
     power = results['power']
     consumption = results['accumulated']
     return build_3figures(price=price, power=power, consumption=consumption)
+
+
+@app.callback(
+    Output('testing_trends', 'figure'),
+    [Input('interval_indicators', 'n_intervals')]
+)
+def update_trends(n_intervals):
+    dt = db.live_data_history()
+    return build_3trends(dt)
+
