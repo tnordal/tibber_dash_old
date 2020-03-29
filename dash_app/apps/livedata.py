@@ -38,22 +38,30 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
     if power > max_range_power:
         max_range_power = power * 1.2
     
+    max_consumtion = 50
+    if consumption > max_consumtion:
+        max_consumtion = consumption * 1.2
+    
+    max_cost = 5
+    if price > max_cost:
+        max_cost = price * 1.2
+    
     fig.add_trace(go.Indicator(
         value = price,
         number= {'valueformat':'.3s'},
         name = 'Tarzan',
         title={'text':'Cost since midnight'},
         mode='gauge+number',
-        delta = {'reference': 200},
+        delta = {'reference': 5},
         gauge = {
-            'axis': {'visible': True, 'range': [None, 5]},
+            'axis': {'visible': True, 'range': [None, max_cost]},
             'bgcolor':'blue'},
         domain = {'row': 0, 'column': 0}))
 
     fig.add_trace(go.Indicator(
         value = power,
         title={'text':'Power'},
-        delta = {'reference': 200},
+        delta = {'reference': 2000},
         mode='gauge+number',
         gauge = {
             'axis': {'visible': True, 'range': [None, max_range_power]},
@@ -64,10 +72,10 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         value = consumption,
         number= {'valueformat':'.4s'},
         title={'text':'Cunsumtion since midnight'},
-        delta = {'reference': 200},
+        delta = {'reference': 40},
         mode='gauge+number',
         gauge = {
-            'axis': {'visible': True, 'range': [None, 50]},
+            'axis': {'visible': True, 'range': [None, max_consumtion]},
             'bgcolor':'blue'},
         domain = {'row': 0, 'column': 2}))
 
@@ -93,8 +101,8 @@ def build_3trends(dt):
 
     # ), row=1, col=1)
     fig.add_trace(go.Scatter(
-        x=x,    # dt['timestamp']
-        y=y,    # dt['power']
+        x=dt['timestamp'],
+        y=dt['power'],
         name='Current Power',
         showlegend=False
 
