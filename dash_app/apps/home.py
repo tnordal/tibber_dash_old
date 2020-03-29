@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 
 from app import app
+from . import graphq_tibber as gt 
 
     # fig.add_trace(go.Scatter(
     #     x=dt['timestamp'],
@@ -14,8 +15,14 @@ from app import app
 
     # ), row=1, col=1)
 
+RESOLUTIONS = ['HOURLY', 'DAILY', 'WEEKLY', 'MONTHLY', 'ANNOLY']
+
+def get_tibber(resolution='HOURLY', periode=96):
+    return gt.get_all(resolution=resolution, periode=periode)
+
 ## Mal
-def build_scatter_graph(id):
+def build_scatter_graph(id, resolution='HOURLY', periode=96):
+    df_home, df_owner, df_consumtion = get_tibber()
     months = ['Jan', 'Feb', 'Mars', 'Apr', 'May']
     values = [150, 130, 120, 110, 85]
     graph = dcc.Graph(
@@ -23,8 +30,8 @@ def build_scatter_graph(id):
             figure = {
                 'data': [
                     go.Scatter(
-                        x=months,
-                        y=values,
+                        x=df_consumtion['to'],
+                        y=df_consumtion['consumption'],
                         opacity=0.5                        
                     )
                 ],
@@ -33,7 +40,8 @@ def build_scatter_graph(id):
         )
     return graph
 
-def build_bar_graph(id):
+def build_bar_graph(id, resolution='DAILY', periode=7):
+    df_home, df_owner, df_consumtion = get_tibber(resolution=resolution, periode=periode)
     months = ['Jan', 'Feb', 'Mars', 'Apr', 'May']
     values = [150, 130, 120, 110, 85]
     graph = dcc.Graph(
@@ -41,8 +49,8 @@ def build_bar_graph(id):
             figure = {
                 'data': [
                     go.Bar(
-                        x=months,
-                        y=values
+                        x=df_consumtion['to'],
+                        y=df_consumtion['consumption']
                     )
                 ],
                 'layout': go.Layout()
@@ -65,18 +73,18 @@ def go_indicator():
 
 main_row = html.Div(
     [
-        html.H2(children="Ovesikt Brakke 4", className=''),
+        html.H2(children="Oversikt Brakke 4", className=''),
         dbc.Row(
-            dbc.Col(build_scatter_graph(id='sct-daily'), align='center', className='bg-light')
+            dbc.Col(build_scatter_graph(id='sct-daily'), align='center', className='')
         ),
         dbc.Row(
             [
-                dbc.Col(build_bar_graph(id='bar-year'), width=4, className='bg-light'),
-                dbc.Col(build_bar_graph(id='bar-month'), width=4, className='bg-light'),
-                dbc.Col(build_bar_graph(id='bar-week'), width=4, className='bg-light')
+                dbc.Col(build_bar_graph(id='bar-year'), width=4, className=''),
+                dbc.Col(build_bar_graph(id='bar-month'), width=4, className=''),
+                dbc.Col(build_bar_graph(id='bar-week'), width=4, className='')
             ]
         ),
-    ], className='align-items-center'
+    ], className='livebody'
 )
 
 layout = html.Div([
