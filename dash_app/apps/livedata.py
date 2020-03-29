@@ -13,7 +13,7 @@ from app import app
 from . import db
 
 dt = db.live_data_history()
-print(dt.head())
+# print(dt.head())
 
 
 def go_indicator():
@@ -93,8 +93,8 @@ def build_3trends(dt):
 
     # ), row=1, col=1)
     fig.add_trace(go.Scatter(
-        x=dt['timestamp'],
-        y=dt['power'],
+        x=x,    # dt['timestamp']
+        y=y,    # dt['power']
         name='Current Power',
         showlegend=False
 

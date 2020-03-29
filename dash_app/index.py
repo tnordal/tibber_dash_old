@@ -17,8 +17,8 @@ app.layout = html.Div([
         dcc.Link('Home', href='/', style={'paddingRight':'10px'}),
         dcc.Link('Live', href='/live', style={'paddingRight':'10px'}),
         dcc.Location(id='url', refresh=False)
-    ], className='row navbar'),
-    html.Div(id='main-content', children='Main', className='')
+    ], className='navbar'),
+    html.Div(id='main-content', children='Main', className='main')
 ])
 
 
