@@ -50,9 +50,9 @@ def live_data():
     session.close()
     return output
 
-def live_data_history():
+def live_data_history(hours=0, minutes=15):
     session = get_session()
-    first_date = dt.datetime.today() - dt.timedelta(hours=4)
+    first_date = dt.datetime.today() - dt.timedelta(hours=hours, minutes=minutes)
 
     query = session.query(LiveTable).filter(LiveTable.timestamp > first_date).all()
     
