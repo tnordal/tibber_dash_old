@@ -7,13 +7,6 @@ import plotly.graph_objects as go
 from app import app
 from . import graphq_tibber as gt 
 
-    # fig.add_trace(go.Scatter(
-    #     x=dt['timestamp'],
-    #     y=dt['accumulated_cost'],
-    #     name='Cost Since Midnight',
-    #     showlegend=False
-
-    # ), row=1, col=1)
 
 RESOLUTIONS = ['HOURLY', 'DAILY', 'WEEKLY', 'MONTHLY', 'ANNUAL']
 
@@ -23,6 +16,7 @@ def get_tibber(resolution='HOURLY', periode=96):
 ## Mal
 def build_scatter_graph(resolution='HOURLY', periode=96):
     df_home, df_owner, df_consumtion = get_tibber(resolution=resolution, periode=periode)
+    print(df_consumtion.tail())
     sum_consumtion = df_consumtion['consumption'].sum()
     figure = {
         'data': [
@@ -46,7 +40,7 @@ def build_bar_graph(resolution='DAILY', periode=7):
     figure = {
         'data': [
             go.Bar(
-                x=df_consumtion['to'],
+                x=df_consumtion['from'],
                 y=df_consumtion['consumption']
             )
         ],
@@ -91,7 +85,10 @@ main_row = html.Div(
                 dbc.Col(
                     dcc.Graph(
                         id='bar-year',
-                        figure= build_bar_graph(resolution='MONTHLY', periode=12)
+                        figure= build_bar_graph(resolution='MONTHLY', periode=12),
+                        config={
+                            'displayModeBar':False
+                        }                        
                     ),
                     width=4, className=''
                 ),
@@ -113,9 +110,9 @@ main_row = html.Div(
                             'displayModeBar':False
                         }                    
                     ),                    
-                    width=4, className=''
+                    width=4, className='md'
                 )
-            ]
+            ], no_gutters=True, # Remove padding between columns
         ),
     ], className='livebody'
 )
