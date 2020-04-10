@@ -81,6 +81,7 @@ target/
 .vscode/
 tibber_api/config.json
 *.db
+kladd*
 
 # Temporary ignore
 

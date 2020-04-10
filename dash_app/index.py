@@ -3,6 +3,7 @@
 
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
 from app import app #, models, execute_db
@@ -17,8 +18,8 @@ app.layout = html.Div([
         dcc.Link('Home', href='/', style={'paddingRight':'10px'}),
         dcc.Link('Live', href='/live', style={'paddingRight':'10px'}),
         dcc.Location(id='url', refresh=False)
-    ], className='navbar'),
-    html.Div(id='main-content', children='Main', className='')
+    ], className='navbar navbar-dark sticky-top mt-5'),
+    dbc.Container(id='main-content', children='Main', className='', fluid=True)
 ], className='')
 
 

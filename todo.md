@@ -18,5 +18,6 @@ ___
 - [x] Fix funksjon returnere figure ikke graph
     > 2020-03-20: Fikset i home.py
 - [ ] Hourly-trend i home får ikke med siste timen
+- [ ] Livedata.py feiler når det ikke er data
 
 ~~Done~~
