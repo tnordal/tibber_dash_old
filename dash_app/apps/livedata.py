@@ -90,8 +90,12 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
 def build_3trends(dt):
     fig = make_subplots(rows=1, cols=1)
 
-    x = [0,1,2,3,4,5]
-    y = [0,1,2,3,4,5]
+    if len(dt) > 0:
+        x = dt['timestamp']
+        y = dt['power']
+    else:
+        x = [0,1,2,3,4,5]
+        y = [0,1,2,3,4,5]
 
     # fig.add_trace(go.Scatter(
     #     x=dt['timestamp'],
@@ -101,8 +105,8 @@ def build_3trends(dt):
 
     # ), row=1, col=1)
     fig.add_trace(go.Scatter(
-        x=dt['timestamp'],
-        y=dt['power'],
+        x=x,
+        y=y,
         name='Current Power',
         showlegend=False
 
