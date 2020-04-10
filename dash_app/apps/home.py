@@ -63,7 +63,7 @@ def go_indicator():
 
 main_row = html.Div(
     [
-        html.H2(children="Oversikt Brakke 4", className=''),
+        dbc.Row(html.H2(children="Oversikt Brakke 4", className=''), justify='center'),
         dcc.Interval(
             id='interval_home',
             interval= (60*1000),
