@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import datetime as dt 
 import os
 import pandas as pd
+import pathlib
 
 
 Base = declarative_base()
@@ -21,9 +22,11 @@ class LiveTable(Base):
     currency = Column('currency', String(5))
 
 def get_session():
-    db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
-    db_path = 'tibber_live.db'
-    engine = create_engine('sqlite:///{}'.format(db_path), echo=False)
+    this_dir = pathlib.Path(os.path.dirname(__file__))
+    filename = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'tibber_live.db')
+    # db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
+    # db_path = 'tibber_live.db'
+    engine = create_engine('sqlite:///{}'.format(filename), echo=False)
     Base.metadata.create_all(bind=engine)
     Session = sessionmaker(bind=engine)
     session = Session()

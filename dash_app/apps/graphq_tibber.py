@@ -10,7 +10,7 @@ import dateutil.parser
 
 def config():
   this_dir = pathlib.Path(os.path.dirname(__file__))
-  filename = pathlib.Path.joinpath(this_dir.parent.parent, 'tibber_api', 'config.json')
+  filename = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'config.json')
   with open( filename, 'r') as cfg_file:
     cfg = json.load(cfg_file)
   

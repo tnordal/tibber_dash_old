@@ -12,6 +12,7 @@ ___
     > 2020-03-30: Done
 - [x] Fjerne Plotly knapper
     > 2020-03-30: Done
+- [ ] Prepare for Docker
 
 ## Bugs
 

@@ -6,6 +6,7 @@ import json
 import _thread
 import time
 import argparse
+import pathlib
 
 from sqlalchemy import create_engine, Column, String, Float, DateTime, Integer, func
 from sqlalchemy.orm import sessionmaker
@@ -15,8 +16,12 @@ from dateutil import parser
 import os
 
 
-db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
-config_file = os.path.join(os.path.dirname(__file__), 'config.json')
+# db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
+# config_file = os.path.join(os.path.dirname(__file__), 'config.json')
+
+this_dir = pathlib.Path(os.path.dirname(__file__))
+config_file = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'config.json')
+db_path = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'tibber_live.db')
 
 # print(db_path)
 # exit()
