@@ -51,7 +51,7 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         number= {'valueformat':'.3s'},
         name = 'Tarzan',
         title={'text':'Cost since midnight'},
-        mode='gauge+number',
+        mode='gauge+number+delta',
         delta = {'reference': 5},
         gauge = {
             'axis': {'visible': True, 'range': [None, max_cost]},
@@ -62,7 +62,7 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         value = power,
         title={'text':'Power'},
         delta = {'reference': 2000},
-        mode='gauge+number',
+        mode='gauge+number+delta',
         gauge = {
             'axis': {'visible': True, 'range': [None, max_range_power]},
             'bgcolor':'blue'},        
@@ -73,7 +73,7 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         number= {'valueformat':'.4s'},
         title={'text':'Cunsumtion since midnight'},
         delta = {'reference': 40},
-        mode='gauge+number',
+        mode='gauge+number+delta',
         gauge = {
             'axis': {'visible': True, 'range': [None, max_consumtion]},
             'bgcolor':'blue'},
