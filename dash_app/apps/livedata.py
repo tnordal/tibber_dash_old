@@ -13,7 +13,11 @@ from app import app
 from . import db
 
 dt = db.live_data_history()
-# print(dt.head())
+
+dropdown_options = []
+for i in range(1,61):
+    opt = {'label': str(i) + ' minutes', 'value': i}
+    dropdown_options.append(opt)
 
 
 def go_indicator():
@@ -89,37 +93,42 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
 
 def build_3trends(dt):
     fig = make_subplots(rows=1, cols=1)
-
-    if len(dt) > 0:
+    dt['min'] = dt['power'].min()
+    dt['max'] = dt['power'].max()
+    if len(dt) > 0: 
         x = dt['timestamp']
         y = dt['power']
+        y2 = dt['min']
+        y3 = dt['max']
     else:
         x = [0,1,2,3,4,5]
         y = [0,1,2,3,4,5]
+        y2 = [10,11,12,13,14,15]
+        y3 = [10,11,12,13,14,15]
 
-    # fig.add_trace(go.Scatter(
-    #     x=dt['timestamp'],
-    #     y=dt['accumulated_cost'],
-    #     name='Cost Since Midnight',
-    #     showlegend=False
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=y3,
+        name='Max Power',
+        showlegend=True
+    ), row=1, col=1)
 
-    # ), row=1, col=1)
     fig.add_trace(go.Scatter(
         x=x,
         y=y,
         name='Current Power',
-        showlegend=False
+        showlegend=True
 
     ), row=1, col=1)
-    # fig.add_trace(go.Scatter(
-    #     x=dt['timestamp'],
-    #     y=dt['accumulated'],
-    #     name='Consumption Since Midnight',
-    #     showlegend=False
 
-    # ), row=1, col=3)   
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=y2,
+        name='Min Power',
+        showlegend=True
+    ), row=1, col=1)
 
-    fig.update_layout(title_text='Title', template='plotly_dark')
+    fig.update_layout(title_text='Current power use!', template='plotly_dark', yaxis={'rangemode':'normal'})
 
     return fig
 
@@ -134,11 +143,24 @@ layout = html.Div([
         id='Testing_3',
         figure = build_3figures()
     ),
+    html.Div(
+        [
+            html.P('Choose minutes for trend:', style={'padding-right':'5px', 'padding-left':'20px','padding-top':'5px', 'font-weight':'bold'}),
+            dcc.Dropdown(
+                id='dropdown-trend-interval',
+                options=dropdown_options,
+                value=15,
+                style={'width':'200px', 'background':'#ccc'}
+            )         
+        ],
+        className='row',
+        style={'vertical-align':'middle'}
+    ),
     dcc.Graph(
         id='testing_trends',
         figure=build_3trends(dt)
     )
-], className='main livebody')
+], className='main livebody', style={"height" : "100vh"})
 
 
 
@@ -148,7 +170,6 @@ layout = html.Div([
 )
 def update_indicators(n_intervals):
     results = db.live_data()
-    # print(results)
     price = results['accumulated_cost']
     power = results['power']
     consumption = results['accumulated']
@@ -157,9 +178,16 @@ def update_indicators(n_intervals):
 
 @app.callback(
     Output('testing_trends', 'figure'),
-    [Input('interval_indicators', 'n_intervals')]
+    [
+        Input('interval_indicators', 'n_intervals'),
+        Input('dropdown-trend-interval', 'value')
+    ]
 )
-def update_trends(n_intervals):
-    dt = db.live_data_history()
+def update_trends(n_intervals, interval):
+    if interval == None:
+        interval=15
+    dt = db.live_data_history(minutes=interval)
     return build_3trends(dt)
+
+
 

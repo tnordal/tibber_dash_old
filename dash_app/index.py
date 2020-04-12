@@ -16,6 +16,7 @@ app.layout = html.Div([
             html.H3('Heading for Multi Page App')
         ]),         
         dcc.Link('Home', href='/', style={'paddingRight':'10px'}),
+        dcc.Link('Stats', href='/stats', style={'paddingRight':'10px'}),
         dcc.Link('Live', href='/live', style={'paddingRight':'10px'}),
         dcc.Location(id='url', refresh=False)
     ], className='navbar navbar-dark sticky-top mt-5'),
@@ -28,6 +29,8 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/':
         return home.layout
+    elif pathname == '/stats':
+        return html.H3('Comming soon')
     elif pathname == '/live':
         return livedata.layout
     else:

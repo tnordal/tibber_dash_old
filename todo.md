@@ -12,7 +12,10 @@ ___
     > 2020-03-30: Done
 - [x] Fjerne Plotly knapper
     > 2020-03-30: Done
-- [ ] Prepare for Docker
+- [x] Prepare for Docker
+    > 2020-04-11: Done
+- [x] Legge in dropdown i livedata current power trend
+    > 2020-04-12: Done
 
 ## Bugs
 
