@@ -4,7 +4,8 @@ ___
 
 ## Nye funksjoner
 
-- [ ] Endre x-akse stolpediagram til å vise år, ukenummer og dag
+- [x] Endre x-akse stolpediagram til å vise år, ukenummer og dag
+    > 2020-04-13: Done
 - [ ] Legge inn grenser/målsettinger i indikatorene i livedata.
 - [ ] Legge inn en ny navbar.
 - [ ] Legge inn en snitt kurve i stolpediagrammene.

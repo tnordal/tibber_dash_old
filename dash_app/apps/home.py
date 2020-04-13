@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
+import pandas as pd
 
 from app import app
 from . import graphq_tibber as gt 
@@ -37,10 +38,22 @@ def build_bar_graph(resolution='DAILY', periode=7):
     df_home, df_owner, df_consumtion = get_tibber(resolution=resolution, periode=periode)
     months = ['Jan', 'Feb', 'Mars', 'Apr', 'May']
     values = [150, 130, 120, 110, 85]
+
+    if resolution == 'DAILY':
+        x = df_consumtion['from'].dt.strftime('%a')
+    elif resolution == 'WEEKLY':
+        # Convert from datatime to timestamp
+        df_consumtion['to'] = pd.to_datetime(df_consumtion['to'], utc=True)
+        x = df_consumtion['to'].dt.week
+    elif resolution == 'MONTHLY':
+        x = df_consumtion['from'].dt.strftime('%B')
+    else:
+        x = df_consumtion['from']
+
     figure = {
         'data': [
             go.Bar(
-                x=df_consumtion['from'],
+                x=x,
                 y=df_consumtion['consumption']
             )
         ],
