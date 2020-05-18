@@ -15,19 +15,34 @@ import models
 from dateutil import parser
 import os
 
+parser = argparse.ArgumentParser()
 
-# db_path = os.path.join(os.path.dirname(__file__), '..', 'tibber_live.db')
-# config_file = os.path.join(os.path.dirname(__file__), 'config.json')
+parser.add_argument('-c', '--config_file', help='Path to json configuration file')
+parser.add_argument('-d', '--db_path', help='Path to database file')
+parser.add_argument('-e', '--echo_db', action='store_true', help='Echo Sqlite')
+
+
+args = parser.parse_args()
 
 this_dir = pathlib.Path(os.path.dirname(__file__))
-config_file = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'config.json')
-db_path = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'tibber_live.db')
 
-# print(db_path)
-# exit()
+if args.config_file:
+    config_file = args.config_file
+else:
+    config_file = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'config.json')
 
-engine = create_engine('sqlite:///{}'.format(db_path), echo=False)
-# engine = create_engine('sqlite:///tibber_live2.db', echo=False)
+if args.db_path:
+    db_path = pathlib.Path.joinpath(args.db_path, 'tibber_live.db')
+else:
+    db_path = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'tibber_live.db')
+
+if args.echo_db:
+    echo = args.echo_db
+else:
+    echo = False
+
+engine = create_engine('sqlite:///{}'.format(db_path), echo=echo)
+
 models.Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -41,9 +56,7 @@ class Config():
         self.api_url = data['url_live']
         
 
-
 config = Config()
-
 
 header = {
     'Sec-WebSocket-Protocol': 'graphql-subscriptions'
@@ -91,7 +104,7 @@ def database_handler(ws, message):
         accumulated_cost = measurement['accumulatedCost']
         currency = measurement['currency']
 
-        parsed_date = parser.parse(timestamp)
+        # parsed_date = parser.parse(timestamp)
         live = models.LiveTable()
 
         # live.timestamp=parser.parse(str(parsed_date)[:-6])
@@ -105,7 +118,7 @@ def database_handler(ws, message):
 
         session.add(live)
         session.commit()
-        print(str(parsed_date)[:-6])
+        # print(str(parsed_date)[:-6])
         # session.close()
 
 def on_error(ws, error):
@@ -170,7 +183,7 @@ def init_db():
 
 
 
-def main(): 
+def main():
     initialize_websocket()
 
 
