@@ -18,6 +18,12 @@ ___
 - [x] Legge in dropdown i livedata current power trend
     > 2020-04-12: Done
 
+## Docker
+
+- [ ] Lage egen Docker fil for dash_app
+- [ ] Lage egen Docker fil for tibber_api
+- [ ] Lage en docker-compose som lager to images
+
 ## Bugs
 
 - [x] Fix funksjon returnere figure ikke graph
