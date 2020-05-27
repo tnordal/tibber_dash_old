@@ -46,7 +46,7 @@ def build_bar_graph(resolution='DAILY', periode=7):
         df_consumtion['to'] = pd.to_datetime(df_consumtion['to'], utc=True)
         x = df_consumtion['to'].dt.week
     elif resolution == 'MONTHLY':
-        x = df_consumtion['from'].dt.strftime('%B')
+        x = pd.to_datetime(df_consumtion['from'], utc=True)
     else:
         x = df_consumtion['from']
 

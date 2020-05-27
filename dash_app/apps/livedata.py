@@ -42,13 +42,34 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
     if power > max_range_power:
         max_range_power = power * 1.2
     
+    if power >=5000:
+        power_bar_color = 'red'
+    elif power > 2000:
+        power_bar_color = 'yellow'
+    else:
+        power_bar_color = 'green'
+    
     max_consumtion = 50
     if consumption > max_consumtion:
         max_consumtion = consumption * 1.2
     
+    if consumption >= 50:
+        consumption_bar_color = 'red'
+    elif consumption >= 40:
+        consumption_bar_color = 'yellow'
+    else:
+        consumption_bar_color = 'green'
+
     max_cost = 5
     if price > max_cost:
         max_cost = price * 1.2
+    
+    if price >= 5:
+        price_bar_color = 'red'
+    elif price >= 4:
+        price_bar_color = 'yellow'
+    else:
+        price_bar_color = 'green'
     
     fig.add_trace(go.Indicator(
         value = price,
@@ -56,31 +77,37 @@ def build_3figures(price=0.25, power=2500, consumption=30.6):
         name = 'Tarzan',
         title={'text':'Cost since midnight'},
         mode='gauge+number+delta',
-        delta = {'reference': 5},
+        delta = {'reference': 5, 'increasing':{'color':'#FF4136'}, 'decreasing':{'color':'#3D9970'}},
         gauge = {
             'axis': {'visible': True, 'range': [None, max_cost]},
-            'bgcolor':'blue'},
+            'bgcolor':'blue',
+            'bar':{'color':price_bar_color},
+            'threshold' : {'line': {'color': "black", 'width': 4}, 'thickness': 0.75, 'value': 4}},
         domain = {'row': 0, 'column': 0}))
 
     fig.add_trace(go.Indicator(
         value = power,
         title={'text':'Power'},
-        delta = {'reference': 2000},
+        delta = {'reference': 2000, 'increasing':{'color':'#FF4136'}, 'decreasing':{'color':'#3D9970'}},
         mode='gauge+number+delta',
         gauge = {
             'axis': {'visible': True, 'range': [None, max_range_power]},
-            'bgcolor':'blue'},        
+            'bgcolor':'blue',
+            'bar':{'color':power_bar_color},
+            'threshold' : {'line': {'color': "black", 'width': 4}, 'thickness': 0.75, 'value': 2000}},        
         domain = {'row': 0, 'column': 1}))
 
     fig.add_trace(go.Indicator(
         value = consumption,
         number= {'valueformat':'.4s'},
         title={'text':'Cunsumtion since midnight'},
-        delta = {'reference': 40},
+        delta = {'reference': 40, 'increasing':{'color':'#FF4136'}, 'decreasing':{'color':'#3D9970'}},
         mode='gauge+number+delta',
         gauge = {
             'axis': {'visible': True, 'range': [None, max_consumtion]},
-            'bgcolor':'blue'},
+            'bgcolor':'blue',
+            'bar':{'color':consumption_bar_color},
+            'threshold' : {'line': {'color': "black", 'width': 4}, 'thickness': 0.75, 'value': 40}},                 
         domain = {'row': 0, 'column': 2}))
 
     fig.update_layout(
@@ -141,7 +168,10 @@ layout = html.Div([
     ),
     dcc.Graph(
         id='Testing_3',
-        figure = build_3figures()
+        figure = build_3figures(),
+        config = {
+            'displayModeBar':False
+        }
     ),
     html.Div(
         [
@@ -158,7 +188,10 @@ layout = html.Div([
     ),
     dcc.Graph(
         id='testing_trends',
-        figure=build_3trends(dt)
+        figure=build_3trends(dt),
+        config = {
+            'displayModeBar':False
+        }        
     )
 ], className='main livebody', style={"height" : "100vh"})
 
