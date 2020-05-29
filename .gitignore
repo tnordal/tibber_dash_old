@@ -82,6 +82,7 @@ target/
 db/config.json
 *.db
 kladd*
+enve.sh
 
 # Temporary ignore
 
