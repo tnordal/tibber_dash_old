@@ -1,0 +1,9 @@
+gevent==20.5.2
+greenlet==0.4.15
+python-dateutil==2.8.1
+six==1.15.0
+SQLAlchemy==1.3.17
+websocket==0.2.1
+websocket-client==0.57.0
+zope.event==4.4
+zope.interface==5.1.0
