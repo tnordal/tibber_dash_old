@@ -83,6 +83,7 @@ db/config.json
 *.db
 kladd*
 enve.sh
+tibber_api/tibber_subscription2.py
 
 
 # Temporary ignore

@@ -17,24 +17,15 @@ import os
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-c', '--config_file', help='Path to json configuration file')
-parser.add_argument('-d', '--db_path', help='Path to database file')
 parser.add_argument('-e', '--echo_db', action='store_true', help='Echo Sqlite')
-
 
 args = parser.parse_args()
 
 this_dir = pathlib.Path(os.path.dirname(__file__))
 
-if args.config_file:
-    config_file = args.config_file
-else:
-    config_file = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'config.json')
+config_file = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'config.json')
 
-if args.db_path:
-    db_path = pathlib.Path.joinpath(args.db_path, 'tibber_live.db')
-else:
-    db_path = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'tibber_live.db')
+db_path = pathlib.Path.joinpath(this_dir.parent.parent, 'db', 'tibber_live.db')
 
 if args.echo_db:
     echo = args.echo_db
@@ -47,13 +38,24 @@ models.Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
+PUBLIC_TIBBER_API_KEY = "d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a"
+PUBLIC_TIBBER_HOME_ID = "c70dcbe5-4485-4821-933d-a8a86452737b"
+PUBLIC_TIBBER_URL_LIVE = "wss://api.tibber.com/v1-beta/gql/subscriptions"
+
+tibber_api_key = os.environ.get('TIBBER_API_KEY')
+tibber_home_id = os.environ.get('TIBBER_HOME_ID')
+
+if tibber_api_key == None:
+    tibber_api_key = PUBLIC_TIBBER_API_KEY
+
+if tibber_home_id == None:
+    tibber_home_id = PUBLIC_TIBBER_HOME_ID
+
 class Config():
     def __init__(self):
-        with open(config_file, 'r') as f:
-            data = json.load(f)
-        self.token = data['headers']['Authorization']
-        self.home_id = data['home_id']
-        self.api_url = data['url_live']
+        self.token = tibber_api_key
+        self.home_id = tibber_home_id
+        self.api_url = PUBLIC_TIBBER_URL_LIVE
         
 
 config = Config()
